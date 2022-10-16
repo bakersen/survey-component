@@ -20,12 +20,7 @@ export const theme = createTheme({
 				},
 				head: {
 					border: "1px solid #d9d9d9",
-					fontWeight: 700,
-					"&:first-child": {
-						fontSize: "14px",
-						textTransform: "uppercase",
-						fontWeight: 900,
-					},
+					fontWeight: 700
 				},
 			},
 		},
