@@ -40,13 +40,15 @@ function createColumn(columnLabel, columnValue) {
 export default function ModalBox(props) {
 	const { surveyforms, setSurveyforms, form } = props;
 	const [open, setOpen] = React.useState(false);
-	const [newFormName, setNewFormName] = React.useState("");
+	const [newFormName, setNewFormName] = React.useState(form.formName);
 	const [rowLabel, setRowLabel] = React.useState("");
 	const [rowValue, setRowValue] = React.useState("");
 	const [columnLabel, setColumnLabel] = React.useState("");
 	const [columnValue, setColumnValue] = React.useState("");
-	const [rows, setRow] = React.useState([]);
-	const [columns, setColumn] = React.useState([]);
+	const [rows, setRow] = React.useState(form.rows);
+	const [columns, setColumn] = React.useState(form.columns);
+
+   
 
 	React.useEffect(() => {}, [
 		newFormName,
@@ -56,7 +58,7 @@ export default function ModalBox(props) {
 		columnValue,
 	]);
 
-	console.log(form);
+   console.log(form);
 
 	const handleClickOpen = () => {
 		setOpen(true);
@@ -66,10 +68,8 @@ export default function ModalBox(props) {
 		setOpen(false);
 	};
 
-   console.log(form.rows);
-
 	const addRow = () => {
-		setRow([...form.rows, createRow(rowLabel, rowValue, form.rows)]);
+		setRow([...rows, createRow(rowLabel, rowValue, rows)]);
 		setRowLabel("");
 		setRowValue("");
 	};
@@ -81,14 +81,18 @@ export default function ModalBox(props) {
 	};
 
 	const deleteRow = (id) => {
-		setRow(form.rows.filter((value) => value.id !== id));
+		setRow(rows.filter((value) => value.id !== id));
 	};
 
-const saveForm = () => {
+   const deleteColumn = (id) => {
+				setColumn(columns.filter((value) => value.id !== id));
+			};
+
+const saveForm = (id) => {
 	setSurveyforms(
 		surveyforms.map((value) => {
 			if (value.id === form.id) {
-				return { ...value, formName: newFormName };
+				return { ...value, formName: newFormName, rows:rows, columns:columns };
 			} else {
 				return value;
 			}
@@ -105,7 +109,7 @@ const saveForm = () => {
 	return (
 		<div>
 			<EditIcon
-				sx={{ boxShadow: "none", fontWeight: 700, fontSize: "16px" }}
+				sx={{ boxShadow: "none", fontWeight: 700, fontSize: "15px" }}
 				onClick={handleClickOpen}
 			/>
 			<Dialog open={open} onClose={handleClose} fullWidth={true} maxWidth="lg">
@@ -129,9 +133,9 @@ const saveForm = () => {
 							<Grid xs={12} md={6}>
 								<Paper sx={{ padding: "15px" }}>
 									<TabsPanel
-										rows={form.rows}
-										columns={form.columns}
-										newFormName={form.formName}
+										rows={rows}
+										columns={columns}
+										newFormName={newFormName}
 										setNewFormName={setNewFormName}
 										addRow={addRow}
 										addColumn={addColumn}
@@ -144,6 +148,7 @@ const saveForm = () => {
 										setColumnLabel={setColumnLabel}
 										setColumnValue={setColumnValue}
 										deleteRow={deleteRow}
+										deleteColumn={deleteColumn}
 									/>
 								</Paper>
 							</Grid>
@@ -151,11 +156,7 @@ const saveForm = () => {
 								<Paper sx={{ padding: "15px" }}>
 									<Typography variant="h6">Preview</Typography>
 									<Divider sx={{ margin: "10px 0" }} />
-									<SurveyTable
-										rows={form.rows}
-										columns={form.columns}
-										newFormName={form.formName}
-									/>
+									<SurveyTable rows={rows} columns={columns} newFormName={newFormName} />
 								</Paper>
 								<Stack sx={{ marginTop: "15px" }} spacing={2} direction="row">
 									<Button onClick={saveForm} color="success" variant="contained">

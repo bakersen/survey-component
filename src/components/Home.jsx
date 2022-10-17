@@ -18,7 +18,7 @@ function Home() {
 
 	React.useEffect(() => {}, [surveyforms]);
 	return (
-		<Grid container sx={{ padding: "30px 0;", bgcolor: "#eee" }}>
+		<Grid container sx={{ padding: "30px 0;", bgcolor: "#eee", height:"100vh" }}>
 			<Container fixed>
 				<Paper
 					sx={{

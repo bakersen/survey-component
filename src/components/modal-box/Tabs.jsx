@@ -49,6 +49,8 @@ export default function BasicTabs(props) {
 		setNewFormName,
 		rowLabel,
 		rowValue,
+		columnLabel,
+		columnValue,
 		setRowLabel,
 		setRowValue,
 		setColumnLabel,
@@ -56,7 +58,9 @@ export default function BasicTabs(props) {
 		addRow,
 		addColumn,
 		rows,
+		columns,
 		deleteRow,
+		deleteColumn,
 	} = props;
 	const [value, setValue] = React.useState(0);
 
@@ -84,7 +88,7 @@ export default function BasicTabs(props) {
 				<Grid container spacing={3}>
 					<Grid xs={12}>
 						<Typography sx={{ fontWeight: 700 }} variant="p">
-							Set Rows
+							Set Questions
 						</Typography>
 						<Stack sx={{ marginTop: "15px" }} spacing={1} direction="row">
 							<TextField
@@ -101,7 +105,7 @@ export default function BasicTabs(props) {
 							/>
 							<AddCircleIcon
 								sx={{
-									fontSize: "22px",
+									fontSize: "20px",
 									cursor: "pointer",
 									"&:hover": { color: "#1976d2" },
 								}}
@@ -125,11 +129,66 @@ export default function BasicTabs(props) {
 									/>
 									<RemoveCircleIcon
 										sx={{
-											fontSize: "25px",
+											fontSize: "20px",
 											cursor: "pointer",
+											color: "red",
 											"&:hover": { color: "#1976d2" },
 										}}
-										onClick={()=>deleteRow(row.id)}
+										onClick={() => deleteRow(row.id)}
+									/>
+								</Stack>
+							);
+						})}
+					</Grid>
+					<Grid xs={12}>
+						<Typography sx={{ fontWeight: 700 }} variant="p">
+							Set Variables
+						</Typography>
+						<Stack sx={{ marginTop: "15px" }} spacing={1} direction="row">
+							<TextField
+								label="Enter Label"
+								size="small"
+								defaultValue={columnLabel}
+								onChange={(event) => setColumnLabel(event.target.value)}
+							/>
+							<TextField
+								label="Enter value"
+								size="small"
+								defaultValue={columnValue}
+								onChange={(event) => setColumnValue(event.target.value)}
+							/>
+							<AddCircleIcon
+								sx={{
+									fontSize: "20px",
+									cursor: "pointer",
+									"&:hover": { color: "#1976d2" },
+								}}
+								onClick={addColumn}
+							/>
+						</Stack>
+						{columns.map((column) => {
+							return (
+								<Stack sx={{ marginTop: "15px" }} spacing={1} direction="row">
+									<TextField
+										label="Enter Label"
+										size="small"
+										value={column.label}
+										onChange={(event) => setColumnLabel(event.target.value)}
+									/>
+									<TextField
+										label="Enter value"
+										size="small"
+										value={column.value}
+										onChange={(event) => setColumnValue(event.target.value)}
+									/>
+									<RemoveCircleIcon
+										sx={{
+											fontSize: "20px",
+											cursor: "pointer",
+											color: "red",
+											"&:hover": { color: "#1976d2" },
+										}}
+										onClick={() => deleteColumn(column.id)}
 									/>
 								</Stack>
 							);

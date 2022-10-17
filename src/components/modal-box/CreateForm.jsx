@@ -25,8 +25,9 @@ function createRow(rowLabel, rowValue, id) {
 	return obj;
 }
 
-function createColumn(columnLabel, columnValue) {
+function createColumn(columnLabel, columnValue, id) {
 	const obj = {
+		id: id.length === 0 ? 1 : id[id.length - 1].id + 1,
 		label: columnLabel,
 		value:
 			columnValue === "" || !columnValue
@@ -55,9 +56,8 @@ export default function ModalBox(props) {
 		columnValue,
 	]);
 
-	console.log(rowLabel);
-	console.log(rowValue);
 	console.log(rows)
+	console.log(columns)
 
 	const handleClickOpen = () => {
 		setOpen(true);
@@ -74,7 +74,7 @@ export default function ModalBox(props) {
 	};
 
 	const addColumn = () => {
-		setColumn([...columns, createColumn(columnLabel, columnValue)]);
+		setColumn([...columns, createColumn(columnLabel, columnValue, columns)]);
 		setColumnLabel("");
 		setColumnValue("");
 	};
@@ -82,6 +82,10 @@ export default function ModalBox(props) {
 	const deleteRow = (id) => {
 		setRow(rows.filter((value) => value.id !== id));
 	}
+
+	const deleteColumn = (id) => {
+		setColumn(columns.filter((value) => value.id !== id));
+	};
 
 	const saveForm = () => {
 		const details = {
@@ -140,7 +144,8 @@ export default function ModalBox(props) {
 										setRowValue={setRowLabel}
 										setColumnLabel={setColumnLabel}
 										setColumnValue={setColumnValue}
-										deleteRow={deleteRow} 
+										deleteRow={deleteRow}
+										deleteColumn={deleteColumn}
 									/>
 								</Paper>
 							</Grid>
