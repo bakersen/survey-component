@@ -16,11 +16,11 @@ export const theme = createTheme({
 					fontSize: "14px",
 				},
 				body: {
-					border: "1px solid #d9d9d9 !important",
+					border: "1px solid #cbcbcb !important",
 				},
 				head: {
 					border: "1px solid #d9d9d9",
-					fontWeight: 700
+					fontWeight: 700,
 				},
 			},
 		},

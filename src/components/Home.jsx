@@ -7,6 +7,7 @@ import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import Stack from "@mui/material/Stack";
 import SurveyTable from "./SurveyTable";
+import CreateForm from "./modal-box/ModalBox"
 
 function Home() {
 	return (
@@ -20,10 +21,11 @@ function Home() {
 					elevation={1}
 				>
 					<Stack spacing={2}>
-						<Box>
-							<Typography variant="h5" sx={{ fontWeight: "700" }}>
+						<Box style={{ display: "flex", justifyContent: "space-between" }}>
+							<Typography variant="h5" sx={{ fontWeight: "700", color: "#1976d2" }}>
 								Survey Form
 							</Typography>
+							<CreateForm />
 						</Box>
 						<Divider sx={{ bgcolor: "black" }} />
 						<SurveyTable />

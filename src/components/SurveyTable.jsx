@@ -5,9 +5,9 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import Radio from "@mui/material/Radio";
 import { ThemeProvider } from "@mui/material/styles";
 import { theme } from "../TableStyles";
+
 
 function createRow(rowLabel, rowValue) {
 	const obj = {
@@ -35,7 +35,6 @@ function createColumn(columnLabel, columnValue) {
 
 
 export default function SurveyTable() {
-	const [selectedValue, setSelectedValue] = React.useState(0);
 	const [rowLabel, setRowLabel] = React.useState("");
 	const [rowValue, setRowValue] = React.useState("");
 	const [columnLabel, setColumnLabel] = React.useState("");
@@ -43,11 +42,9 @@ export default function SurveyTable() {
 	const [rows, setRow] = React.useState([])
 	const [columns, setColumn] = React.useState([]);
 
+
 	React.useEffect(() => {}, [rowLabel, rowValue, columnLabel, columnValue]);
 
-	const handleChange = (event) => {
-		setSelectedValue(event.target.value);
-	};
 
 	const addRow = () => {		
 		setRow([...rows, createRow(rowLabel, rowValue)]);
@@ -56,47 +53,16 @@ export default function SurveyTable() {
 	}
 
 	const addColumn = () => {
-		setColumn([...rows, createColumn(columnLabel, columnValue)]);
+		setColumn([...columns, createColumn(columnLabel, columnValue)]);
 		setColumnLabel("");
 		setColumnValue("");
 	};
 
 
 
+
 	return (
 		<ThemeProvider theme={theme}>
-			<div style={{ display: "flex", justifyContent: "space-between" }}>
-				<div style={{ width: "60%" }}>
-					<input
-						value={rowLabel}
-						onChange={(e) => setRowLabel(e.target.value)}
-						type="text"
-						placeholder="label"
-					/>
-					<input
-						value={rowValue}
-						onChange={(e) => setRowValue(e.target.value)}
-						type="text"
-						placeholder="value"
-					/>
-					<button onClick={addRow}>Add Row</button>
-				</div>
-				<div style={{ width: "50%" }}>
-					<input
-						value={columnLabel}
-						onChange={(e) => setColumnLabel(e.target.value)}
-						type="text"
-						placeholder="label"
-					/>
-					<input
-						value={columnValue}
-						onChange={(e) => setColumnValue(e.target.value)}
-						type="text"
-						placeholder="value"
-					/>
-					<button onClick={addColumn}>Add Column</button>
-				</div>
-			</div>
 			<TableContainer>
 				<Table
 					sx={{ minWidth: 100, background: "white" }}
@@ -106,18 +72,18 @@ export default function SurveyTable() {
 					<TableHead>
 						<TableRow variant="head">
 							{rows.length === 0 ? null : (
-								<TableCell padding="none" align="center">
+								<TableCell padding="normal" align="center">
 									{" "}
 								</TableCell>
 							)}
 							{columns.length === 0 ? (
-								<TableCell padding="none" align="center">
+								<TableCell padding="normal" align="center">
 									{" "}
 								</TableCell>
 							) : (
 								columns.map((value, index) => {
 									return (
-										<TableCell key={index} padding="none" align="center">
+										<TableCell key={index} padding="normal" align="center">
 											{value.label}
 										</TableCell>
 									);
@@ -137,79 +103,62 @@ export default function SurveyTable() {
 								<TableCell
 									sx={{ width: "20%" }}
 									align="center"
-									padding="none"
+									padding="normal"
 									component="td"
 									scope="row"
 								>
 									{" "}
 								</TableCell>
-								<TableCell align="center" padding="none" component="td" scope="row">
-									<Radio
-										checked={selectedValue === 0}
-										onChange={handleChange}
-										value={0}
-										name="radio-buttons"
-										inputProps={{ "aria-label": "A" }}
-										size="small"
-									/>
+								<TableCell align="center" padding="normal" component="td" scope="row">
+									<input type="radio" name="radio-buttons" value="" />
 								</TableCell>
 							</TableRow>
 						) : rows.length === 0 && columns.length !== 0 ? (
 							columns.map((value, index) => {
 								return (
 									<TableCell align="center" padding="none" component="td" scope="row">
-										<Radio
-											checked={selectedValue === value.value}
-											onChange={handleChange}
-											value={value.value}
-											name="radio-buttons"
-											inputProps={{ "aria-label": "A" }}
-											size="small"
-										/>
+										<input type="radio" name="radio-buttons" value={value.value} />
 									</TableCell>
 								);
 							})
 						) : (
-							rows.map((row) => (
-								<TableRow
-									key={row.value}
-									sx={{
-										"&:nth-child(odd)": {
-											backgroundColor: columns.length === 0 ? "white" : "#eee",
-										},
-									}}
-								>
-									<TableCell align="center" padding="none" component="td" scope="row">
-										{row.label}
-									</TableCell>
-									{columns.length === 0 ? (
+							rows.map((row, index) => {
+								const rowIndex = index;
+								console.log(row.value);
+								return (
+									<TableRow
+										key={rowIndex}
+										sx={{
+											"&:nth-child(odd)": {
+												backgroundColor: columns.length === 0 ? "white" : "#eee",
+											},
+										}}
+									>
 										<TableCell align="center" padding="none" component="td" scope="row">
-											<Radio
-												checked={selectedValue === row.value}
-												onChange={handleChange}
-												value={row.value}
-												inputProps={{ "aria-label": "A" }}
-												size="small"
-											/>
+											{row.label}
 										</TableCell>
-									) : (
-										columns.map((value, index) => {
-											return (
-												<TableCell align="center" padding="none" component="td" scope="row">
-													<Radio
-														checked={selectedValue === value.value + row.value}
-														onChange={handleChange}
-														value={value.value + row.value}
-														name="radio-buttons"
-														inputProps={{ "aria-label": "A" }}
-														size="small"
-													/>
-												</TableCell>
-											);
-										})
-									)}
-								</TableRow>
-							))
+										{columns.length === 0 ? (
+											<TableCell align="center" padding="normal" component="td" scope="row">
+												<input type="radio" name="radio-buttons" value={row.value} />
+											</TableCell>
+										) : (
+											columns.map((column, index) => {
+												return (
+													<TableCell
+														align="center"
+														padding="normal"
+														component="td"
+														scope="row"
+														key={index}
+													>
+														<input type="radio" name={row.value} value={column.value} />
+													</TableCell>
+												);
+											})
+										)}
+									</TableRow>
+								);
+							})
 						)}
 					</TableBody>
 				</Table>
