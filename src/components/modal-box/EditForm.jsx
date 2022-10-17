@@ -2,7 +2,7 @@ import * as React from "react";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
-import AddIcon from "@mui/icons-material/Add";
+import EditIcon from "@mui/icons-material/Edit";
 import Typography from "@mui/material/Typography";
 import CloseIcon from "@mui/icons-material/Close";
 import { Box } from "@mui/system";
@@ -14,7 +14,7 @@ import Divider from "@mui/material/Divider";
 import Stack from "@mui/material/Stack";
 
 export default function ModalBox(props) {
-	const { surveyforms, setSurveyforms, id} = props;
+	const { surveyforms, setSurveyforms, form} = props;
 	const [open, setOpen] = React.useState(false);
 	const [newFormName, setNewFormName] = React.useState("");
 
@@ -32,11 +32,11 @@ export default function ModalBox(props) {
 
 	const saveForm = () => {
 		const details = {
-			id:id,
+			id:form.id,
 			formName: newFormName,
 		};
-		setSurveyforms(surveyforms.map((form)=>{
-         if(form.id===id){
+		setSurveyforms(surveyforms.map((value)=>{
+         if(value.id===form.id){
             return details
          } else {
             return form
@@ -47,14 +47,10 @@ export default function ModalBox(props) {
 
 	return (
 		<div>
-			<Button
-				sx={{ boxShadow: "none", fontWeight: 700, fontSize: "12px" }}
-				size="small"
-				variant="contained"
+			<EditIcon
 				onClick={handleClickOpen}
-			>
-				<AddIcon /> Create Form
-			</Button>
+				sx={{fontSize: "18px" }}
+			/>
 			<Dialog open={open} onClose={handleClose} fullWidth={true} maxWidth="lg">
 				<DialogContent
 					style={{

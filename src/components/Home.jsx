@@ -8,6 +8,8 @@ import Divider from "@mui/material/Divider";
 import Stack from "@mui/material/Stack";
 import SurveyTable from "./SurveyTable";
 import CreateForm from "./modal-box/CreateForm";
+import EditForm from "./modal-box/EditForm";
+
 
 function Home() {
 	const [surveyforms, setSurveyforms] = React.useState([]);
@@ -34,7 +36,12 @@ function Home() {
 						</Box>
 						<Divider sx={{ bgcolor: "black" }} />
 						{surveyforms.map((form) => {
-							return <SurveyTable key={form.id} formName={form.formName} />;
+							return (
+								<Box>
+									<EditForm form={form} surveyforms={surveyforms} setSurveyforms={setSurveyforms} />
+									<SurveyTable key={form.id} formName={form.formName} />
+								</Box>
+							);
 						})}
 					</Stack>
 				</Paper>
