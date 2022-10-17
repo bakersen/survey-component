@@ -14,7 +14,7 @@ import EditForm from "./modal-box/EditForm";
 function Home() {
 	const [surveyforms, setSurveyforms] = React.useState([]);
 
-	console.log(surveyforms)
+	// console.log(surveyforms)
 
 	React.useEffect(() => {}, [surveyforms]);
 	return (
@@ -37,9 +37,16 @@ function Home() {
 						<Divider sx={{ bgcolor: "black" }} />
 						{surveyforms.map((form) => {
 							return (
-								<Box>
-									<EditForm form={form} surveyforms={surveyforms} setSurveyforms={setSurveyforms} />
-									<SurveyTable key={form.id} formName={form.formName} />
+								<Box key={form.id}>
+									<span style={{ display: "flex", justifyContent: "space-between" }}>
+										{form.formName}{" "}
+										<EditForm
+											form={form}
+											surveyforms={surveyforms}
+											setSurveyforms={setSurveyforms}
+										/>
+									</span>
+									<SurveyTable />
 								</Box>
 							);
 						})}

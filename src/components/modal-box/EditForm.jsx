@@ -13,12 +13,38 @@ import TabsPanel from "./Tabs";
 import Divider from "@mui/material/Divider";
 import Stack from "@mui/material/Stack";
 
+function createRow(rowLabel, rowValue) {
+	const obj = {
+		label: rowLabel,
+		value:
+			rowValue === "" || !rowValue
+				? rowLabel.toLowerCase().split(" ")[0]
+				: rowValue,
+	};
+	return obj;
+}
+
+function createColumn(columnLabel, columnValue) {
+	const obj = {
+		label: columnLabel,
+		value:
+			columnValue === "" || !columnValue
+				? columnLabel.toLowerCase().split(" ")[0]
+				: columnValue,
+	};
+	return obj;
+}
+
 export default function ModalBox(props) {
-	const { surveyforms, setSurveyforms, form} = props;
+	const { surveyforms, setSurveyforms, form } = props;
 	const [open, setOpen] = React.useState(false);
 	const [newFormName, setNewFormName] = React.useState("");
-
-	console.log(newFormName);
+	const [rowLabel, setRowLabel] = React.useState("");
+	const [rowValue, setRowValue] = React.useState("");
+	const [columnLabel, setColumnLabel] = React.useState("");
+	const [columnValue, setColumnValue] = React.useState("");
+	const [rows, setRow] = React.useState([]);
+	const [columns, setColumn] = React.useState([]);
 
 	React.useEffect(() => {}, [newFormName]);
 
@@ -31,26 +57,37 @@ export default function ModalBox(props) {
 	};
 
 	const saveForm = () => {
-		const details = {
-			id:form.id,
-			formName: newFormName,
-		};
-		setSurveyforms(surveyforms.map((value)=>{
-         if(value.id===form.id){
-            return details
-         } else {
-            return form
-         }
-      }));
+		setSurveyforms(
+			surveyforms.map((value) => {
+				if (value.id === form.id) {
+					return { ...value, formName: newFormName };
+				} else {
+					return value;
+				}
+			})
+		);
 		handleClose();
+	};
+
+	const addRow = () => {
+		setRow([...rows, createRow(rowLabel, rowValue)]);
+		setRowLabel("");
+		setRowValue("");
+	};
+
+	const addColumn = () => {
+		setColumn([...columns, createColumn(columnLabel, columnValue)]);
+		setColumnLabel("");
+		setColumnValue("");
+	};
+
+	const deleteForm = () => {
+		setSurveyforms(surveyforms.filter((value) => value.id !== form.id));
 	};
 
 	return (
 		<div>
-			<EditIcon
-				onClick={handleClickOpen}
-				sx={{fontSize: "18px" }}
-			/>
+			<EditIcon onClick={handleClickOpen} sx={{ fontSize: "18px" }} />
 			<Dialog open={open} onClose={handleClose} fullWidth={true} maxWidth="lg">
 				<DialogContent
 					style={{
@@ -71,23 +108,26 @@ export default function ModalBox(props) {
 						<Grid container spacing={2}>
 							<Grid xs={12} md={6}>
 								<Paper sx={{ padding: "15px" }}>
-									<TabsPanel newFormName={newFormName} setNewFormName={setNewFormName} />
+									<TabsPanel
+										newFormName={form.formName}
+										setNewFormName={setNewFormName}
+									/>
 								</Paper>
 							</Grid>
 							<Grid xs={12} md={6}>
 								<Paper sx={{ padding: "15px" }}>
 									<Typography variant="h6">Preview</Typography>
 									<Divider sx={{ margin: "10px 0" }} />
-									<SurveyTable newFormName={newFormName} />
+									<SurveyTable rows={rows} columns={columns} newFormName={newFormName} />
 								</Paper>
 								<Stack sx={{ marginTop: "15px" }} spacing={2} direction="row">
 									<Button onClick={saveForm} color="success" variant="contained">
 										Save
 									</Button>
-									<Button color="grey" variant="contained">
+									<Button onClick={handleClose} color="info" variant="contained">
 										Cancel
 									</Button>
-									<Button color="error" variant="contained">
+									<Button onClick={deleteForm} color="error" variant="contained">
 										Remove
 									</Button>
 								</Stack>

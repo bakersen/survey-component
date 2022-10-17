@@ -9,62 +9,13 @@ import { ThemeProvider } from "@mui/material/styles";
 import { theme } from "../TableStyles";
 
 
-function createRow(rowLabel, rowValue) {
-	const obj = {
-		label: rowLabel,
-		value:
-			rowValue === "" || !rowValue
-				? rowLabel.toLowerCase().split(" ")[0]
-				: rowValue,
-	};
-	return obj;
-}
-
-function createColumn(columnLabel, columnValue) {
-	const obj = {
-		label: columnLabel,
-		value:
-			columnValue === "" || !columnValue
-				? columnLabel.toLowerCase().split(" ")[0]
-				: columnValue,
-	};
-	return obj;
-}
-
 
 export default function SurveyTable(props) {
-	const {formName} = props
-	const [rowLabel, setRowLabel] = React.useState("");
-	const [rowValue, setRowValue] = React.useState("");
-	const [columnLabel, setColumnLabel] = React.useState("");
-	const [columnValue, setColumnValue] = React.useState("");
-	const [rows, setRow] = React.useState([]);
-	const [columns, setColumn] = React.useState([]);
-
-	React.useEffect(() => {}, [
-		rowLabel,
-		rowValue,
-		columnLabel,
-		columnValue,
-		formName,
-	]);
-
-	const addRow = () => {
-		setRow([...rows, createRow(rowLabel, rowValue)]);
-		setRowLabel("");
-		setRowValue("");
-	};
-
-	const addColumn = () => {
-		setColumn([...columns, createColumn(columnLabel, columnValue)]);
-		setColumnLabel("");
-		setColumnValue("");
-	};
-
+	const { newFormName, rows, columns} = props;
 	return (
 		<ThemeProvider theme={theme}>
-			{formName}
-			<TableContainer>
+			{newFormName}
+			<TableContainer sx={{marginTop:"10px"}}>
 				<Table
 					sx={{ minWidth: 100, background: "white" }}
 					aria-label="simple table"
@@ -125,7 +76,6 @@ export default function SurveyTable(props) {
 						) : (
 							rows.map((row, index) => {
 								const rowIndex = index;
-								console.log(row.value);
 								return (
 									<TableRow
 										key={rowIndex}
