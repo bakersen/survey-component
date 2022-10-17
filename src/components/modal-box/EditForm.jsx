@@ -8,10 +8,19 @@ import CloseIcon from "@mui/icons-material/Close";
 import { Box } from "@mui/system";
 import Grid from "@mui/material/Unstable_Grid2";
 import Paper from "@mui/material/Paper";
-import SurveyTable from "../SurveyTable"
+import SurveyTable from "../SurveyTable";
+import TabsPanel from "./Tabs";
+import Divider from "@mui/material/Divider";
+import Stack from "@mui/material/Stack";
 
-export default function ResponsiveDialog() {
+export default function ModalBox(props) {
+	const { surveyforms, setSurveyforms, id} = props;
 	const [open, setOpen] = React.useState(false);
+	const [newFormName, setNewFormName] = React.useState("");
+
+	console.log(newFormName);
+
+	React.useEffect(() => {}, [newFormName]);
 
 	const handleClickOpen = () => {
 		setOpen(true);
@@ -19,6 +28,21 @@ export default function ResponsiveDialog() {
 
 	const handleClose = () => {
 		setOpen(false);
+	};
+
+	const saveForm = () => {
+		const details = {
+			id:id,
+			formName: newFormName,
+		};
+		setSurveyforms(surveyforms.map((form)=>{
+         if(form.id===id){
+            return details
+         } else {
+            return form
+         }
+      }));
+		handleClose();
 	};
 
 	return (
@@ -34,7 +58,7 @@ export default function ResponsiveDialog() {
 			<Dialog open={open} onClose={handleClose} fullWidth={true} maxWidth="lg">
 				<DialogContent
 					style={{
-						backgroundColor: "#f0f0f0",
+						backgroundColor: "#cbcbcb",
 					}}
 				>
 					<Box
@@ -44,21 +68,33 @@ export default function ResponsiveDialog() {
 							marginBottom: "10px",
 						}}
 					>
-						<Typography variant="h6">Survey Form</Typography>
+						<Typography variant="h6">Survey Component</Typography>
 						<CloseIcon sx={{ cursor: "pointer" }} onClick={handleClose} />
 					</Box>
 					<Box sx={{ flexGrow: 1 }}>
 						<Grid container spacing={2}>
 							<Grid xs={12} md={6}>
 								<Paper sx={{ padding: "15px" }}>
-									<Typography variant="h6">Survey Form</Typography>
+									<TabsPanel newFormName={newFormName} setNewFormName={setNewFormName} />
 								</Paper>
 							</Grid>
 							<Grid xs={12} md={6}>
 								<Paper sx={{ padding: "15px" }}>
 									<Typography variant="h6">Preview</Typography>
-                           <SurveyTable />
+									<Divider sx={{ margin: "10px 0" }} />
+									<SurveyTable newFormName={newFormName} />
 								</Paper>
+								<Stack sx={{ marginTop: "15px" }} spacing={2} direction="row">
+									<Button onClick={saveForm} color="success" variant="contained">
+										Save
+									</Button>
+									<Button color="grey" variant="contained">
+										Cancel
+									</Button>
+									<Button color="error" variant="contained">
+										Remove
+									</Button>
+								</Stack>
 							</Grid>
 						</Grid>
 					</Box>

@@ -32,25 +32,28 @@ function createColumn(columnLabel, columnValue) {
 }
 
 
-
-
-export default function SurveyTable() {
+export default function SurveyTable(props) {
+	const {formName} = props
 	const [rowLabel, setRowLabel] = React.useState("");
 	const [rowValue, setRowValue] = React.useState("");
 	const [columnLabel, setColumnLabel] = React.useState("");
 	const [columnValue, setColumnValue] = React.useState("");
-	const [rows, setRow] = React.useState([])
+	const [rows, setRow] = React.useState([]);
 	const [columns, setColumn] = React.useState([]);
 
+	React.useEffect(() => {}, [
+		rowLabel,
+		rowValue,
+		columnLabel,
+		columnValue,
+		formName,
+	]);
 
-	React.useEffect(() => {}, [rowLabel, rowValue, columnLabel, columnValue]);
-
-
-	const addRow = () => {		
+	const addRow = () => {
 		setRow([...rows, createRow(rowLabel, rowValue)]);
 		setRowLabel("");
 		setRowValue("");
-	}
+	};
 
 	const addColumn = () => {
 		setColumn([...columns, createColumn(columnLabel, columnValue)]);
@@ -58,11 +61,9 @@ export default function SurveyTable() {
 		setColumnValue("");
 	};
 
-
-
-
 	return (
 		<ThemeProvider theme={theme}>
+			{formName}
 			<TableContainer>
 				<Table
 					sx={{ minWidth: 100, background: "white" }}
@@ -138,7 +139,12 @@ export default function SurveyTable() {
 											{row.label}
 										</TableCell>
 										{columns.length === 0 ? (
-											<TableCell align="center" padding="normal" component="td" scope="row">
+											<TableCell
+												align="center"
+												padding="normal"
+												component="td"
+												scope="row"
+											>
 												<input type="radio" name="radio-buttons" value={row.value} />
 											</TableCell>
 										) : (

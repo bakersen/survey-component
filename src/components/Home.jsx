@@ -7,9 +7,14 @@ import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import Stack from "@mui/material/Stack";
 import SurveyTable from "./SurveyTable";
-import CreateForm from "./modal-box/ModalBox"
+import CreateForm from "./modal-box/CreateForm";
 
 function Home() {
+	const [surveyforms, setSurveyforms] = React.useState([]);
+
+	console.log(surveyforms)
+
+	React.useEffect(() => {}, [surveyforms]);
 	return (
 		<Grid container sx={{ padding: "30px 0;", bgcolor: "#eee" }}>
 			<Container fixed>
@@ -23,12 +28,14 @@ function Home() {
 					<Stack spacing={2}>
 						<Box style={{ display: "flex", justifyContent: "space-between" }}>
 							<Typography variant="h5" sx={{ fontWeight: "700", color: "#1976d2" }}>
-								Survey Form
+								Build Your Survey Form
 							</Typography>
-							<CreateForm />
+							<CreateForm surveyforms={surveyforms} setSurveyforms={setSurveyforms} />
 						</Box>
 						<Divider sx={{ bgcolor: "black" }} />
-						<SurveyTable />
+						{surveyforms.map((form) => {
+							return <SurveyTable key={form.id} formName={form.formName} />;
+						})}
 					</Stack>
 				</Paper>
 			</Container>
