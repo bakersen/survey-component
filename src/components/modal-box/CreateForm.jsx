@@ -15,7 +15,7 @@ import Stack from "@mui/material/Stack";
 
 function createRow(rowLabel, rowValue, id) {
 	const obj = {
-		id: id[id.length - 1].id + 1,
+		id: id.length === 0 ? 1 : id[id.length - 1].id + 1,
 		label: rowLabel,
 		value:
 			rowValue === "" || !rowValue
@@ -25,7 +25,7 @@ function createRow(rowLabel, rowValue, id) {
 	return obj;
 }
 
-function createColumn(columnLabel, columnValue, id) {
+function createColumn(columnLabel, columnValue) {
 	const obj = {
 		label: columnLabel,
 		value:
@@ -44,7 +44,7 @@ export default function ModalBox(props) {
 	const [rowValue, setRowValue] = React.useState("");
 	const [columnLabel, setColumnLabel] = React.useState("");
 	const [columnValue, setColumnValue] = React.useState("");
-	const [rows, setRow] = React.useState([{ id: 1, label: "", value: "" }]);
+	const [rows, setRow] = React.useState([]);
 	const [columns, setColumn] = React.useState([]);
 
 	React.useEffect(() => {}, [
@@ -87,6 +87,8 @@ export default function ModalBox(props) {
 		const details = {
 			id: surveyforms.length === 0 ? 1 : surveyforms[surveyforms.length - 1].id + 1,
 			formName: newFormName,
+			rows:rows,
+			columns:columns
 		};
 		setSurveyforms([...surveyforms, details]);
 		setNewFormName("");

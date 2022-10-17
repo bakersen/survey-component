@@ -12,6 +12,7 @@ import { theme } from "../TableStyles";
 
 export default function SurveyTable(props) {
 	const { newFormName, rows, columns} = props;
+	console.log(rows)
 	return (
 		<ThemeProvider theme={theme}>
 			{newFormName}

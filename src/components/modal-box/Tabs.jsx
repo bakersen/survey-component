@@ -9,8 +9,6 @@ import Stack from "@mui/material/Stack";
 import Grid from "@mui/material/Unstable_Grid2";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
-import Button from "@mui/material/Button";
-import AddIcon from "@mui/icons-material/Add";
 
 function TabPanel(props) {
 	const { children, value, index, ...other } = props;
@@ -59,7 +57,6 @@ export default function BasicTabs(props) {
 		addColumn,
 		rows,
 		deleteRow,
-		updateRow,
 	} = props;
 	const [value, setValue] = React.useState(0);
 
@@ -89,43 +86,54 @@ export default function BasicTabs(props) {
 						<Typography sx={{ fontWeight: 700 }} variant="p">
 							Set Rows
 						</Typography>
-						{rows.map((row, index) => {
+						<Stack sx={{ marginTop: "15px" }} spacing={1} direction="row">
+							<TextField
+								label="Enter Label"
+								size="small"
+								defaultValue={rowLabel}
+								onChange={(event) => setRowLabel(event.target.value)}
+							/>
+							<TextField
+								label="Enter value"
+								size="small"
+								defaultValue={rowValue}
+								onChange={(event) => setRowValue(event.target.value)}
+							/>
+							<AddCircleIcon
+								sx={{
+									fontSize: "22px",
+									cursor: "pointer",
+									"&:hover": { color: "#1976d2" },
+								}}
+								onClick={addRow}
+							/>
+						</Stack>
+						{rows.map((row) => {
 							return (
-								<Stack
-									sx={{ marginTop: "15px", display: "flex", alignItems: "center" }}
-									spacing={1}
-									direction="row"
-								>
+								<Stack sx={{ marginTop: "15px" }} spacing={1} direction="row">
 									<TextField
 										label="Enter Label"
 										size="small"
-										defaultValue={row.label}
-										onChange={(event) => {
-                                 setRowLabel(event.target.value)
-                                 updateRow(row.id)
-                              }}
+										value={row.label}
+										onChange={(event) => setRowLabel(event.target.value)}
 									/>
 									<TextField
 										label="Enter value"
 										size="small"
-										defaultValue={row.value}
+										value={row.value}
 										onChange={(event) => setRowValue(event.target.value)}
 									/>
 									<RemoveCircleIcon
 										sx={{
-											fontSize: "20px",
+											fontSize: "25px",
 											cursor: "pointer",
-											color: "red",
 											"&:hover": { color: "#1976d2" },
 										}}
-										onClick={() => (rows.length === 1 ? null : deleteRow(row.id))}
+										onClick={()=>deleteRow(row.id)}
 									/>
 								</Stack>
 							);
 						})}
-						<Button sx={{marginTop:"10px"}} onClick={addRow} variant="contained">
-							<AddIcon /> ADD ANOTHER
-						</Button>
 					</Grid>
 				</Grid>
 			</TabPanel>

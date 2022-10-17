@@ -14,7 +14,7 @@ import EditForm from "./modal-box/EditForm";
 function Home() {
 	const [surveyforms, setSurveyforms] = React.useState([]);
 
-	// console.log(surveyforms)
+	console.log(surveyforms)
 
 	React.useEffect(() => {}, [surveyforms]);
 	return (
@@ -46,7 +46,7 @@ function Home() {
 											setSurveyforms={setSurveyforms}
 										/>
 									</span>
-									<SurveyTable />
+									<SurveyTable rows={form.rows} columns={form.columns} />
 								</Box>
 							);
 						})}

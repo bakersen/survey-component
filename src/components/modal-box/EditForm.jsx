@@ -2,7 +2,7 @@ import * as React from "react";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
-import EditIcon from "@mui/icons-material/Edit";
+import AddIcon from "@mui/icons-material/Add";
 import Typography from "@mui/material/Typography";
 import CloseIcon from "@mui/icons-material/Close";
 import { Box } from "@mui/system";
@@ -12,9 +12,11 @@ import SurveyTable from "../SurveyTable";
 import TabsPanel from "./Tabs";
 import Divider from "@mui/material/Divider";
 import Stack from "@mui/material/Stack";
+import EditIcon from "@mui/icons-material/Edit";
 
-function createRow(rowLabel, rowValue) {
+function createRow(rowLabel, rowValue, id) {
 	const obj = {
+		id: id.length === 0 ? 1 : id[id.length - 1].id + 1,
 		label: rowLabel,
 		value:
 			rowValue === "" || !rowValue
@@ -46,7 +48,15 @@ export default function ModalBox(props) {
 	const [rows, setRow] = React.useState([]);
 	const [columns, setColumn] = React.useState([]);
 
-	React.useEffect(() => {}, [newFormName]);
+	React.useEffect(() => {}, [
+		newFormName,
+		rowLabel,
+		rowValue,
+		columnLabel,
+		columnValue,
+	]);
+
+	console.log(form);
 
 	const handleClickOpen = () => {
 		setOpen(true);
@@ -56,21 +66,10 @@ export default function ModalBox(props) {
 		setOpen(false);
 	};
 
-	const saveForm = () => {
-		setSurveyforms(
-			surveyforms.map((value) => {
-				if (value.id === form.id) {
-					return { ...value, formName: newFormName };
-				} else {
-					return value;
-				}
-			})
-		);
-		handleClose();
-	};
+   console.log(form.rows);
 
 	const addRow = () => {
-		setRow([...rows, createRow(rowLabel, rowValue)]);
+		setRow([...form.rows, createRow(rowLabel, rowValue, form.rows)]);
 		setRowLabel("");
 		setRowValue("");
 	};
@@ -81,17 +80,38 @@ export default function ModalBox(props) {
 		setColumnValue("");
 	};
 
+	const deleteRow = (id) => {
+		setRow(form.rows.filter((value) => value.id !== id));
+	};
+
+const saveForm = () => {
+	setSurveyforms(
+		surveyforms.map((value) => {
+			if (value.id === form.id) {
+				return { ...value, formName: newFormName };
+			} else {
+				return value;
+			}
+		})
+	);
+	handleClose();
+};
+
 	const deleteForm = () => {
 		setSurveyforms(surveyforms.filter((value) => value.id !== form.id));
 	};
 
+
 	return (
 		<div>
-			<EditIcon onClick={handleClickOpen} sx={{ fontSize: "18px" }} />
+			<EditIcon
+				sx={{ boxShadow: "none", fontWeight: 700, fontSize: "16px" }}
+				onClick={handleClickOpen}
+			/>
 			<Dialog open={open} onClose={handleClose} fullWidth={true} maxWidth="lg">
 				<DialogContent
 					style={{
-						backgroundColor: "#cbcbcb",
+						backgroundColor: "rgb(235 235 235)",
 					}}
 				>
 					<Box
@@ -109,8 +129,21 @@ export default function ModalBox(props) {
 							<Grid xs={12} md={6}>
 								<Paper sx={{ padding: "15px" }}>
 									<TabsPanel
+										rows={form.rows}
+										columns={form.columns}
 										newFormName={form.formName}
 										setNewFormName={setNewFormName}
+										addRow={addRow}
+										addColumn={addColumn}
+										rowLabel={rowLabel}
+										rowValue={rowValue}
+										columnLabel={columnLabel}
+										columnValue={columnValue}
+										setRowLabel={setRowLabel}
+										setRowValue={setRowLabel}
+										setColumnLabel={setColumnLabel}
+										setColumnValue={setColumnValue}
+										deleteRow={deleteRow}
 									/>
 								</Paper>
 							</Grid>
@@ -118,13 +151,17 @@ export default function ModalBox(props) {
 								<Paper sx={{ padding: "15px" }}>
 									<Typography variant="h6">Preview</Typography>
 									<Divider sx={{ margin: "10px 0" }} />
-									<SurveyTable rows={rows} columns={columns} newFormName={newFormName} />
+									<SurveyTable
+										rows={form.rows}
+										columns={form.columns}
+										newFormName={form.formName}
+									/>
 								</Paper>
 								<Stack sx={{ marginTop: "15px" }} spacing={2} direction="row">
 									<Button onClick={saveForm} color="success" variant="contained">
 										Save
 									</Button>
-									<Button onClick={handleClose} color="info" variant="contained">
+									<Button onClick={handleClose} color="info" variant="outlined">
 										Cancel
 									</Button>
 									<Button onClick={deleteForm} color="error" variant="contained">
